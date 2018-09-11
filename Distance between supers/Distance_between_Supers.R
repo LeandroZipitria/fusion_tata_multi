@@ -4,6 +4,8 @@
 
 library(tidyverse)
 
+## que lindo quedo !
+
 ####################################################
 #### PART 1 - Euclidean distance between supers ####
 ####################################################
