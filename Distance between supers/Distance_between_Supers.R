@@ -4,8 +4,6 @@
 
 library(tidyverse)
 
-## que lindo quedo !
-
 ####################################################
 #### PART 1 - Euclidean distance between supers ####
 ####################################################
@@ -77,47 +75,6 @@ table(.Last.value$haytata)
 menor.500 <- dplyr::filter(menor.500, Chain1 == "Ta - Ta")
 
 
-
-
-################
-################
-#### Delete everything below this point once part 3 is finished #### 
-
-# Extract the number of super
-md1 <- apply(dst, 1, function(x) {if (all(is.na(x))) {NA}  else {which.min(x)} })
-y <- na.omit(as.data.frame(matrix(unlist(md1), nrow = length(md1))))
-
-# Extract the distance to the next supermarket
-md2 <- apply(dst, 1, function(x) {if (all(is.na(x))) {NA}  else {min(x, na.rm = TRUE)} })
-y$dist <- na.omit(as.data.frame(matrix(unlist(md2), nrow = length(md2))))
-
-# Now delete the extra rows added earlier
-y[,2] <- x # Add numbers
-
-# Load again super base, just supers needed
-df <- as.data.frame(Establecimientos[,c(1,6)]) # Just the number of supermarkets & chain
-colnames(df) <- c("Super", "Cadena")
-y <- merge.data.frame(y, df, by="Super", all.y=TRUE)
-
-# Delete auxiliary bases
-rm(dst,Establecimientos,df,less.than.5k,x)
-
-# Save database
-write.csv(y, "~/Dropbox/Docs/Investigacion/2016.Distance and quality/Bases/A_menos_de_mediok.csv", row.names = FALSE)
-
-write.csv(y, file="C:/Users/usuario/Dropbox/2017.Seba/Bases/SupComp.csv", row.names=FALSE)     ## salvo base
-
-
-### Stores at less than... #### (para calcular los supers que estan a una distancia menor a x kilometros)
-
-less <- as.vector(apply(dst, 1, function(x) paste(which(x <= 0.5), collapse = ",")))
-y <- as.data.frame(cbind(x, less))
-supers <- as.data.frame(Establecimientos$Super)
-names(supers) <- c("Super")
-z <- merge.data.frame(y,supers, by = "Super", all.y = TRUE)
-
-# Save database
-write.csv(z, "~/Dropbox/Docs/Investigacion/2016.Distance and quality/Bases/A_menos_de_mediok.csv", row.names = FALSE)
 
 ############################
 #### END OF PROGRAMMING ####
