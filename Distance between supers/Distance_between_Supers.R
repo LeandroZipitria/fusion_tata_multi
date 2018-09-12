@@ -50,7 +50,12 @@ y <- as.data.frame(cbind(x, less.than.5k, less.than.1k, less.than.15k, less.than
 #     variable 1: supermarket number
 #     variable 2: logical. TRUE=super has a Tata at less than 0.5Km
 
-# Computes an NxN matriz. Each cell takes a TRUE value if the two supers are at a distance less than 500 meters
+# 1) Computes an NxN matrix, Each cell takes a TRUE value if the two supers are at a distance less than 500 meters.
+# 2) Reshapes the matrix into a data frame that contains chain names.
+# 3) Checks for lines where Chain2 is Tata and Chain1 and Chain2 are at less than 500 meters
+# 4) Groups by Super1
+# 5) Computes the summation of all flags from step 3), if summation is greater than zero (that is, if there's at least one TRUE), it flags it as TRUE, otherwise, as FALSE
+# Result is a dataframe which lists all stores by number and name and flags (TRUE) which of them have a tata store less than 500 meters away.
 menor.500 <- (dst <= 0.5) %>% 
       reshape2::melt(na.rm=TRUE) %>% 
       as_tibble() %>% 
@@ -60,21 +65,10 @@ menor.500 <- (dst <= 0.5) %>%
       left_join(dplyr::select(Establecimientos, Super, chain), by=c("Super2" = "Super")) %>% 
       dplyr::rename(Chain2 = chain) %>%
       dplyr::select(Super1, Chain1, Super2, Chain2, Less) %>%
-      dplyr::arrange(Super1)
-# Up to this point, dataframe contains all supermarkets. Now we filter only the obersvations where Tata is involved.
-a <- menor.500 %>%
-      group_by(Super1) %>%
-      mutate(haytata = if_else((Chain2 == "Ta - Ta")&(Less == TRUE), TRUE, FALSE))
-
-table((filter(a, Super1 == 3))$haytata)
-
-      group_by(Super1)
-      summarise(less = sum(haytata))
-table(.Last.value$haytata)
-
-menor.500 <- dplyr::filter(menor.500, Chain1 == "Ta - Ta")
-
-
+      dplyr::arrange(Super1) %>%
+      mutate(haytata = if_else((Chain2 == "Ta - Ta") & (Less == TRUE), TRUE, FALSE)) %>%
+      group_by(Super1, Chain1) %>%
+      summarise(tata.menos.500 = if_else(sum(haytata) > 0, TRUE, FALSE))
 
 ############################
 #### END OF PROGRAMMING ####
