@@ -3,6 +3,7 @@
 #################################
 
 library(tidyverse)
+library(magrittr)
 
 ####################################################
 #### PART 1 - Euclidean distance between supers ####
@@ -69,6 +70,24 @@ menor.500 <- (dst <= 0.5) %>%
       mutate(haytata = if_else((Chain2 == "Ta - Ta") & (Less == TRUE), TRUE, FALSE)) %>%
       group_by(Super1, Chain1) %>%
       summarise(tata.menos.500 = if_else(sum(haytata) > 0, TRUE, FALSE))
+super.718 <- (dst <= 0.5) %>% 
+      reshape2::melt(na.rm=TRUE) %>% 
+      as_tibble() %>% 
+      dplyr::rename(Super1 = Var1, Super2 = Var2, Less = value) %>%
+      left_join(dplyr::select(Establecimientos, Super, chain), by=c("Super1" = "Super")) %>% 
+      dplyr::rename(Chain1 = chain) %>%
+      left_join(dplyr::select(Establecimientos, Super, chain), by=c("Super2" = "Super")) %>% 
+      dplyr::rename(Chain2 = chain) %>%
+      dplyr::select(Super1, Chain1, Super2, Chain2, Less) %>%
+      dplyr::arrange(Super1) %>%
+      mutate(haytata = if_else((Chain2 == "Ta - Ta") & (Less == TRUE), TRUE, FALSE)) %>%
+      filter(Super2 == 718) %$%
+      table(.$haytata) %>%
+      names() %>%
+      as.logical()
+menor.500[(dim(menor.500)[1]+1),] <- c(718, as.character(Establecimientos[Establecimientos$Super == 718L,]$chain), super.718)
+menor.500$Super1 <- as.numeric(menor.500$Super1)
+Establecimientos <- left_join(Establecimientos, menor.500, by=c("Super" = "Super1", "chain" = "Chain1"))
 
 ############################
 #### END OF PROGRAMMING ####
