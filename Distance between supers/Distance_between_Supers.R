@@ -89,6 +89,8 @@ menor.500[(dim(menor.500)[1]+1),] <- c(718, as.character(Establecimientos[Establ
 menor.500$Super1 <- as.numeric(menor.500$Super1)
 Establecimientos <- left_join(Establecimientos, menor.500, by=c("Super" = "Super1", "chain" = "Chain1"))
 
+# agregar 1km y 2km
+
 ############################
 #### END OF PROGRAMMING ####
 ############################
