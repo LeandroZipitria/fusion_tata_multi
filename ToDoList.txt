@@ -20,3 +20,4 @@
 - 1/2, 1 y 2 kilometros (distintos grupos de tratamiento y contro)
 - usar cajas como weight (por si tamaño difiere, pesnsar si no lo captura efecto fijo)
 - separar grupo tratado en 3: cerca de un TATA, cerca de un Multi, cerca de ambos
+
