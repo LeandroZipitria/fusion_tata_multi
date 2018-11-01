@@ -34,6 +34,17 @@ stores %>%
       select(chain, menor.2) %$%
       table(.)
 
+#### Tamamaño promedio de supers ####
+group_by(stores, chain) %>%
+      summarise(obs = n(), cajas.prom = mean(Cashiers))
+
+stores %>%
+      mutate(interior = if_else(depto != "Montevideo", 1, 0)) %>%
+      group_by(chain) %>%
+      summarise(interior = sum(interior), montevideo = n() - interior)
+
+#### Número de productos ####
+
 
 
 
