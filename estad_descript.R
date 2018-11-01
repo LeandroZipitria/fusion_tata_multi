@@ -5,12 +5,37 @@
 library(tidyverse)
 library(magrittr)
 
-base <- read_csv("Bases TATA/P_All_150_clean.csv")
+################
+#### STORES ####
+################
 
-base %>%
-      filter(Product %in% c(126,127)) %>%
-      ggplot() +
-      geom_line(aes(Date, Price, color=Product))
+stores <- read_rds("Establecimientos.rds")
+
+#### SOLAPAMIENTO DE TIENDAS ####
+
+# No existen Multiahorros con un TaTa a 500 mts o menos
+stores %>%
+      filter(chain == "Multi Ahorro") %>%
+      droplevels() %>%
+      select(chain, menor.500) %$%
+      table(.)
+
+# Hay un Multiahorro con un Tata a 1 km o menos
+stores %>%
+      filter(chain == "Multi Ahorro") %>%
+      droplevels() %>%
+      select(chain, menor.1) %$%
+      table(.)
+
+# Hay 6 Multiahorro con un Tata a 2 kms o menos
+stores %>%
+      filter(chain == "Multi Ahorro") %>%
+      droplevels() %>%
+      select(chain, menor.2) %$%
+      table(.)
+
+
+
 
 # Separar muestra en dos:
 #     más de un km 
