@@ -161,7 +161,7 @@ menor[(dim(menor)[1]+1),] <- c(718, as.character(Establecimientos[Establecimient
 menor$Super1 <- as.numeric(menor$Super1)
 Establecimientos <- left_join(Establecimientos, menor, by=c("Super" = "Super1", "chain" = "Chain1"))
 
-save(Establecimientos, file="Establecimientos.RData")
+readr::write_rds(Establecimientos, "Establecimientos.rds")
 
 ############################
 #### END OF PROGRAMMING ####
