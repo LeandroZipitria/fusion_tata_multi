@@ -3,16 +3,12 @@
 1) Armar estadísticos descriptivos:
 
 - ver cuantos TATA - Multi se solapan y cuantos quedan solos
-- Analizar tamaño promedio de super (cajas), localizacion (Montevideo, interior), numero de productos,
-  para el grupo de tratamiento y control, para la muestra original (2013) y todos
+- Analizar tamaño promedio de super (cajas), localizacion (Montevideo, interior), numero de productos, para el grupo de tratamiento y control, para la muestra original (2013) y todos.
+- Lista de super??
   
-  
-
 2) Regresiones
 - ver si van efectos fijos producto y super
 - tendencia por super?
-
-
 
 3) Robustez:
 
