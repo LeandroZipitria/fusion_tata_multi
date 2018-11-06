@@ -38,6 +38,7 @@ stores %>%
 group_by(stores, chain) %>%
       summarise(obs = n(), cajas.prom = mean(Cashiers))
 
+#### Localización de los supers ####
 stores %>%
       mutate(interior = if_else(depto != "Montevideo", 1, 0)) %>%
       group_by(chain) %>%
