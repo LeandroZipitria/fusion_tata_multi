@@ -45,8 +45,27 @@ stores %>%
       summarise(interior = sum(interior), montevideo = n() - interior)
 
 #### Número de productos ####
+prods <- readr::read_csv("Bases TATA/P_All_25_clean.csv")
+prods <- prods %>%
+      filter(!is.na(Price)) %>%
+      group_by(Product, Year, Month, Super) %>%
+      summarise(obs = n(), 
+                moda = as.numeric(names(sort(table(Price), decreasing=TRUE)))[1L])
+      
+for (i in seq(50, 150, 25)) {
+      path <- paste0("Bases TATA/P_All_", i, "_clean.csv")
+      prods <- readr::read_csv(file=path) %>%
+            filter(!is.na(Price)) %>%
+            group_by(Product, Year, Month, Super) %>%
+            summarise(obs = n(), 
+                      moda = as.numeric(names(sort(table(Price), decreasing=T)))[1L]) %>%
+            bind_rows(prods, .)
+}
 
-
+prods %>%
+      group_by(Super) %>%
+      summarise(obs = n(),
+                num_prods = length(unique(Product)))
 
 
 # Separar muestra en dos:
