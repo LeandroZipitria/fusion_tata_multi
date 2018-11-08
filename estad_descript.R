@@ -29,10 +29,11 @@ for (i in seq(50, 150, 25)) {
 }
 
 # Number of goods per store
-num_prods <- prods %>%
+prods_per_store <- prods %>%
       group_by(Super) %>%
       summarise(obs = n(),
-                num_prods = length(unique(Product)))
+                num_prods = length(unique(Product))) %>%
+      arrange(desc(num_prods))
 
 ################
 #### STORES ####
