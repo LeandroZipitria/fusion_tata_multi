@@ -9,26 +9,9 @@ library(magrittr)
 #### PRODS POR SUPER ####
 #########################
 
-# Número de productos
-# Creates a unique data.frame with all the data by super, prod, year and month
-prods <- readr::read_csv("Bases TATA/P_All_25_clean.csv")
-prods <- prods %>%
-      filter(!is.na(Price)) %>%
-      group_by(Product, Year, Month, Super) %>%
-      summarise(obs = n(), 
-                moda = as.numeric(names(sort(table(Price), decreasing=TRUE)))[1L])
-      
-for (i in seq(50, 150, 25)) {
-      path <- paste0("Bases TATA/P_All_", i, "_clean.csv")
-      prods <- readr::read_csv(file=path) %>%
-            filter(!is.na(Price)) %>%
-            group_by(Product, Year, Month, Super) %>%
-            summarise(obs = n(), 
-                      moda = as.numeric(names(sort(table(Price), decreasing=T)))[1L]) %>%
-            bind_rows(prods, .)
-}
+prods <- readr::write_rds(prods, path="precios_mensuales.rds")
 
-# Number of goods per store
+# Number of products per store
 prods_per_store <- prods %>%
       group_by(Super) %>%
       summarise(obs = n(),
@@ -39,11 +22,14 @@ prods_per_store <- prods %>%
 #### STORES ####
 ################
 
+stores <- read_rds("Establecimientos.rds")
+
 #### SOLAPAMIENTO DE TIENDAS ####
 
 # Los supermercados para los que no hay productos en la base de prods son descartados
-stores <- read_rds("Establecimientos.rds")
-stores <- filter(stores, Super %in% unique(num_prods$Super)) %>% droplevels()
+stores <- filter(stores, Super %in% unique(prods_per_store$Super)) %>% droplevels()
+length(unique(stores$Super)) # 550 tiendas
+length(unique(stores$chain)) # 24 cadenas
 
 # No existen Multiahorros con un TaTa a 500 mts o menos
 stores %>%
