@@ -4,12 +4,13 @@
 
 library(tidyverse)
 library(magrittr)
+library(ggthemes)
 
 #########################
 #### PRODS POR SUPER ####
 #########################
 
-prods <- readr::write_rds(prods, path="precios_mensuales.rds")
+prods <- readr::read_rds(path="precios_mensuales.rds")
 
 # Number of products per store
 prods_per_store <- prods %>%
@@ -17,6 +18,11 @@ prods_per_store <- prods %>%
       summarise(obs = n(),
                 num_prods = length(unique(Product))) %>%
       arrange(desc(num_prods))
+
+ggplot(prods_per_store) +
+      geom_histogram(aes(num_prods)) +
+      labs(x="Cantidad de productos distintos por tienda", y=NULL) +
+      ggthemes::theme_economist()
 
 ################
 #### STORES ####
