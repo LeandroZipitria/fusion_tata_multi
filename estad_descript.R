@@ -60,13 +60,25 @@ stores %>%
 
 #### Tamamaño promedio de supers ####
 group_by(stores, chain) %>%
-      summarise(obs = n(), cajas.prom = mean(Cashiers))
+      summarise(obs = n(), cajas.prom = mean(Cashiers)) %>%
+      ggplot() +
+      geom_bar(aes(x=fct_reorder(chain, cajas.prom, .desc=FALSE), y=cajas.prom), stat="identity") +
+      labs(x=NULL, y="Average number of cashiers by chain") +
+      coord_flip() +
+      ggthemes::theme_economist()
 
 #### Localización de los supers ####
 stores %>%
-      mutate(interior = if_else(depto != "Montevideo", 1, 0)) %>%
-      group_by(chain) %>%
-      summarise(interior = sum(interior), montevideo = n() - interior)
+      mutate(Location = as.factor(if_else(depto != "Montevideo", "Interior", "Montevideo"))) %>%
+      ggplot() +
+      geom_bar(aes(x=fct_reorder(chain, as.numeric(Location), .fun=mean), fill=Location), 
+               position="fill") +
+      coord_flip() +
+      labs(x=NULL, y="Store spatial distribution by chain", fill=NULL) +
+      ggthemes::theme_economist() +
+      theme(legend.position="right")
+      
+      
 
 #################################
 #### FIN DE LA PROGRAMAACIÓN ####
