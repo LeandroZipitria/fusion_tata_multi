@@ -10,7 +10,7 @@ library(ggthemes)
 #### PRODS POR SUPER ####
 #########################
 
-prods <- readr::read_rds(path="precios_mensuales.rds")
+prods <- readr::read_rds(path = "precios_mensuales.rds")
 
 # Number of products per store
 prods_per_store <- prods %>%
@@ -21,7 +21,7 @@ prods_per_store <- prods %>%
 
 ggplot(prods_per_store) +
       geom_histogram(aes(num_prods)) +
-      labs(x="Cantidad de productos distintos por tienda", y=NULL) +
+      labs(x = "Cantidad de productos distintos por tienda", y = NULL) +
       ggthemes::theme_economist()
 
 ################
@@ -62,8 +62,9 @@ stores %>%
 group_by(stores, chain) %>%
       summarise(obs = n(), cajas.prom = mean(Cashiers)) %>%
       ggplot() +
-      geom_bar(aes(x=fct_reorder(chain, cajas.prom, .desc=FALSE), y=cajas.prom), stat="identity") +
-      labs(x=NULL, y="Average number of cashiers by chain") +
+      geom_bar(aes(x = fct_reorder(chain, cajas.prom, .desc = FALSE), y = cajas.prom), 
+               stat = "identity") +
+      labs(x = NULL, y = "Average number of cashiers by chain") +
       coord_flip() +
       ggthemes::theme_economist()
 
@@ -71,14 +72,12 @@ group_by(stores, chain) %>%
 stores %>%
       mutate(Location = as.factor(if_else(depto != "Montevideo", "Interior", "Montevideo"))) %>%
       ggplot() +
-      geom_bar(aes(x=fct_reorder(chain, as.numeric(Location), .fun=mean), fill=Location), 
-               position="fill") +
+      geom_bar(aes(x = fct_reorder(chain, as.numeric(Location), .fun = mean), fill = Location), 
+               position = "fill") +
       coord_flip() +
-      labs(x=NULL, y="Store spatial distribution by chain", fill=NULL) +
+      labs(x = NULL, y = "Store spatial distribution by chain", fill = NULL) +
       ggthemes::theme_economist() +
-      theme(legend.position="right")
-      
-      
+      theme(legend.position = "right")
 
 #################################
 #### FIN DE LA PROGRAMAACIÓN ####
