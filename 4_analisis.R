@@ -30,7 +30,7 @@ prods <- mutate(
 # dummies <- predict(dummyVars(~ as.character(Product), data = prods), newdata = prods)
 # head(dummies)
 # summary(lm(moda ~ Product + Date, data = prods))
-did <- felm(moda ~ Product + P_t*menor.500 + ingresomedio | Product, data = prods)
+did <- felm(moda ~ P_t*menor.500 + ingresomedio | Product, data = prods)
 summary(did)
 
 prods <- prods %>%
@@ -40,7 +40,7 @@ prods <- prods %>%
       right_join(prods, trend, by = c("Year", "Month")) %>%
       select(Year, Month, trend, everything())
 
-did2 <- felm(moda ~ Product + trend + P_t*menor.500 + ingresomedio | Product, data = prods)
+did2 <- felm(moda ~ trend*menor.500 + ingresomedio | Product, data = prods)
 summary(did2)
 
 ungroup(prods) %>%
